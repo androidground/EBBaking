@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Baking Recipes</string>
+    <string name="title_recipeitem_list">Recipe</string>
+    <string name="title_recipeitem_detail">Recipe Item Detail</string>
+
+    <string name="mime_type" translatable="false">text/plain</string>
+    <string name="share_title">Share Recipes</string>
+    <string name="share_content">Recipes your best way to relax yourself</string>
+    <string name="share">Share</string>
+    <string name="ingredients">Recipe Ingredients</string>
+
+    <string name="instruction_previous">Previous</string>
+    <string name="instruction_next">Next</string>
+
+    <string name="appwidget_text">EBBaking Recipes</string>
+    <string name="appwidget_no_item">No recipes</string>
+    <string name="recipe_serves_text">Serves</string>
+    <string name="configure">Recipe Ingredients Configure</string>
+    <string name="add_widget">Add widget</string>
+</resources>

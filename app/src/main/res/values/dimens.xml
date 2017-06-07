@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="app_bar_height">200dp</dimen>
+    <dimen name="item_width">200dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="normal_margin">16dp</dimen>
+    <dimen name="spacing_between_grid_items">10dp</dimen>
+    <dimen name="recipe_item_text">22sp</dimen>
+    <dimen name="recipe_grid_container_height">150dp</dimen>
+
+    <dimen name="instructions_steps_text_size">18sp</dimen>
+    <dimen name="element_spacing">8dp</dimen>
+
+    <dimen name="widget_margin">8dp</dimen>
+
+    <dimen name="widget_item_title">20sp</dimen>
+    <dimen name="widget_item_text">16sp</dimen>
+
+    <dimen name="font_size">18sp</dimen>
+</resources>

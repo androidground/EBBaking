@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipeitem_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.eightbytestech.ebbaking.RecipeInstructionDetailFragment">
+
+    <TextView
+        android:id="@+id/titleTextView"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/normal_margin"
+        android:textIsSelectable="true" />
+
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        android:id="@+id/instruction_player"
+        android:layout_width="match_parent"
+        android:layout_height="400dp" />
+
+    <TextView
+        android:id="@+id/descriptionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/normal_margin"
+        android:fontFamily="monospace"
+        android:textSize="@dimen/font_size"
+        android:textIsSelectable="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/normal_margin">
+
+        <TextView
+            android:id="@+id/previousTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_skip_previous_black_24dp"
+            android:drawablePadding="@dimen/element_spacing"
+            android:drawableStart="@drawable/ic_skip_previous_black_24dp"
+            android:text="@string/instruction_previous"
+            android:textSize="@dimen/instructions_steps_text_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/nextTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableEnd="@drawable/ic_skip_next_black_24dp"
+            android:drawablePadding="@dimen/element_spacing"
+            android:drawableRight="@drawable/ic_skip_next_black_24dp"
+            android:gravity="end"
+            android:text="@string/instruction_next"
+            android:textSize="@dimen/instructions_steps_text_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+</LinearLayout>
