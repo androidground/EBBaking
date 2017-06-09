@@ -13,8 +13,12 @@
     <string name="instruction_next">Next</string>
 
     <string name="appwidget_text">EBBaking Recipes</string>
+    <string name="appwidget_recipeid">1</string>
     <string name="appwidget_no_item">No recipes</string>
     <string name="recipe_serves_text">Serves</string>
     <string name="configure">Recipe Ingredients Configure</string>
     <string name="add_widget">Add widget</string>
+
+    <string name="ingredients_item">%1$s %2$s %3$s\n</string>
+
 </resources>

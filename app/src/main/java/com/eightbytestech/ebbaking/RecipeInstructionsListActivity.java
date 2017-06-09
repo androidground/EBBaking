@@ -34,7 +34,6 @@ public class RecipeInstructionsListActivity extends AppCompatActivity implements
 
     public static final String INSTRUCTION_STEP = "instruction_step";
     public static final String INSTRUCTIONS = "instructions";
-    // public static final String INSTRUCTIONS_SCROLL = "instructions_scroll_position";
 
     @BindView(R.id.recipeitem_list)
     RecyclerView instructionsItems;

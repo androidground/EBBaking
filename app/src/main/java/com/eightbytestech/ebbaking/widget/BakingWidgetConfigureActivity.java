@@ -6,24 +6,16 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.eightbytestech.ebbaking.R;
-import com.eightbytestech.ebbaking.RecipeInstructionsListActivity;
 import com.eightbytestech.ebbaking.adapters.RecipesAdapter;
-import com.eightbytestech.ebbaking.data.ApplicationPreferences;
-import com.eightbytestech.ebbaking.data.BakingColumns;
 import com.eightbytestech.ebbaking.data.BakingProvider;
-import com.eightbytestech.ebbaking.data.StepsColumns;
 import com.eightbytestech.ebbaking.models.Ingredient;
 import com.eightbytestech.ebbaking.models.Recipe;
 import com.eightbytestech.ebbaking.models.Step;
@@ -44,7 +36,10 @@ import io.reactivex.schedulers.Schedulers;
 public class BakingWidgetConfigureActivity extends Activity implements AdapterView.OnItemClickListener {
 
     private static final String PREFS_NAME = "com.eightbytestech.mywidgets.NewAppWidget";
-    private static final String PREF_PREFIX_KEY = "appwidget_";
+
+    private static final String PREF_RECIPE_ID = "ID_";
+    private static final String PREF_RECIPE_NAME = "NAME_";
+
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
     @BindView(R.id.recipesGridView)
@@ -60,63 +55,43 @@ public class BakingWidgetConfigureActivity extends Activity implements AdapterVi
     RecipesAdapter mAdapter;
     private ArrayList<Recipe> mRecipeItems = new ArrayList<>();
 
-    public static final String RECIPE_ID = "recipe_id";
-    public static final String RECIPE_NAME = "recipe_name";
-    public static final String RECIPES = "recipes";
-    public static final String RECIPE_POSITION = "recipe_position";
-
-    //EditText mAppWidgetText;
-
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            final Context context = BakingWidgetConfigureActivity.this;
-
-            // When the button is clicked, store the string locally
-            //String widgetText = mAppWidgetText.getText().toString();
-
-            String widgetText = "";
-            createWidget(context, widgetText);
-
-            /*saveTitlePref(context, mAppWidgetId, widgetText);
-
-            // It is the responsibility of the configuration activity to update the app widget
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            NewAppWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId);
-
-            // Make sure we pass back the original appWidgetId
-            Intent resultValue = new Intent();
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-            setResult(RESULT_OK, resultValue);
-            finish();*/
-        }
-    };
-
     public BakingWidgetConfigureActivity() {
         super();
     }
 
     // Write the prefix to the SharedPreferences object for this widget
-    static void saveTitlePref(Context context, int appWidgetId, String text) {
+    static void saveRecipePref(Context context, int appWidgetId, String recipeName, int recipeId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putString(PREF_PREFIX_KEY + appWidgetId, text);
+        prefs.putInt(PREF_RECIPE_ID + appWidgetId, recipeId);
+        prefs.putString(PREF_RECIPE_NAME + appWidgetId, recipeName);
         prefs.apply();
     }
 
     // Read the prefix from the SharedPreferences object for this widget.
     // If there is no preference saved, get the default from a resource
-    static String loadTitlePref(Context context, int appWidgetId) {
+    static String loadRecipeName(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null);
-        if (titleValue != null) {
-            return titleValue;
+        String recipeName = prefs.getString(PREF_RECIPE_NAME + appWidgetId, null);
+        if (recipeName != null) {
+            return recipeName;
         } else {
             return context.getString(R.string.appwidget_text);
         }
     }
 
+    static int loadRecipeId(Context context, int appWidgetId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        int recipeId = prefs.getInt(PREF_RECIPE_ID + appWidgetId, 0);
+        if ( recipeId > 0 ) {
+            return recipeId;
+        } else {
+            return Integer.parseInt(context.getString(R.string.appwidget_recipeid));
+        }
+    }
+
     static void deleteTitlePref(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.remove(PREF_PREFIX_KEY + appWidgetId);
+        prefs.remove(PREF_RECIPE_ID + appWidgetId);
         prefs.apply();
     }
 
@@ -155,8 +130,6 @@ public class BakingWidgetConfigureActivity extends Activity implements AdapterVi
             finish();
             return;
         }
-
-        //mAppWidgetText.setText(loadTitlePref(BakingWidgetConfigureActivity.this, mAppWidgetId));
     }
 
     /**
@@ -224,18 +197,16 @@ public class BakingWidgetConfigureActivity extends Activity implements AdapterVi
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Recipe recipe = mRecipeItems.get(position);
-        ApplicationPreferences.setRecipeId(this,recipe.getId());
-        ApplicationPreferences.setRecipeName(this,recipe.getName());
-        ApplicationPreferences.setRecipeImage(this,recipe.getImage());
+        final Context context = BakingWidgetConfigureActivity.this;
 
-        Intent recipesInstructionsIntent = new Intent(this, RecipeInstructionsListActivity.class);
-        startActivity(recipesInstructionsIntent);
+        Recipe recipe = mRecipeItems.get(position);
+
+        createWidget(context, recipe.getName(), recipe.getId());
     }
 
-    private void createWidget(Context context, String widgetText) {
+    private void createWidget(Context context, String recipeName, int recipeId) {
         // Store the string locally
-        saveTitlePref(context, mAppWidgetId, widgetText);
+        saveRecipePref(context, mAppWidgetId, recipeName, recipeId);
 
         // It is the responsibility of the configuration activity to update the app widget
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
